@@ -248,19 +248,51 @@ jobs:
           gradle-8.4/bin/gradle assembleRelease --no-daemon
         fi
 
+    - name: Sign APK
+      run: |
+        # Generate a keystore for signing
+        keytool -genkey -v -keystore beadvault.keystore -alias beadvault -keyalg RSA -keysize 2048 -validity 10000 \
+          -storepass android -keypass android \
+          -dname "CN=BeadVault, OU=Development, O=BeadVault, L=Unknown, S=Unknown, C=US"
+        
+        # Get build tools directory
+        BUILD_TOOLS_DIR="$ANDROID_HOME/build-tools"
+        LATEST_BUILD_TOOLS=$(ls -v $BUILD_TOOLS_DIR | tail -n 1)
+        BUILD_TOOLS_PATH="$BUILD_TOOLS_DIR/$LATEST_BUILD_TOOLS"
+        
+        # Align the APK
+        $BUILD_TOOLS_PATH/zipalign -v -p 4 \
+          app/build/outputs/apk/release/app-release-unsigned.apk \
+          app/build/outputs/apk/release/app-release-unsigned-aligned.apk
+        
+        # Sign the APK
+        $BUILD_TOOLS_PATH/apksigner sign \
+          --ks beadvault.keystore \
+          --ks-key-alias beadvault \
+          --ks-pass pass:android \
+          --key-pass pass:android \
+          --out app/build/outputs/apk/release/BeadVault-signed.apk \
+          app/build/outputs/apk/release/app-release-unsigned-aligned.apk
+        
+        # Verify signature
+        $BUILD_TOOLS_PATH/apksigner verify app/build/outputs/apk/release/BeadVault-signed.apk
+        
+        echo "APK signed successfully!"
+
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: BeadVault-APK
-        path: app/build/outputs/apk/release/app-release-unsigned.apk
+        path: app/build/outputs/apk/release/BeadVault-signed.apk
         
     - name: Create Release
       if: github.ref == 'refs/heads/main'
+      continue-on-error: true
       uses: softprops/action-gh-release@v1
       with:
         tag_name: v1.0.${{ github.run_number }}
         name: BeadVault v1.0.${{ github.run_number }}
-        files: app/build/outputs/apk/release/app-release-unsigned.apk
+        files: app/build/outputs/apk/release/BeadVault-signed.apk
         body: |
           🧵 BeadVault - Your Free Beading Pattern Library
           
