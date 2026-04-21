@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BeadVault - Free Beading Patterns</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Karla:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --jewel-ruby: #9D174D;
+            --jewel-sapphire: #1E40AF;
+            --jewel-emerald: #065F46;
+            --jewel-amber: #D97706;
+            --jewel-amethyst: #6D28D9;
+            --pearl-white: #FEF7F0;
+            --silk-thread: #F5E6D3;
+            --gold-wire: #CA8A04;
+            --shadow-soft: rgba(0, 0, 0, 0.08);
+            --glass-shine: rgba(255, 255, 255, 0.15);
+        }
+
+        body {
+            font-family: 'Karla', sans-serif;
+            background: linear-gradient(135deg, var(--pearl-white) 0%, var(--silk-thread) 100%);
+            min-height: 100vh;
+            color: #1F2937;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated background beads */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, var(--jewel-ruby) 2px, transparent 2px),
+                radial-gradient(circle at 80% 20%, var(--jewel-sapphire) 3px, transparent 3px),
+                radial-gradient(circle at 60% 70%, var(--jewel-emerald) 2px, transparent 2px),
+                radial-gradient(circle at 10% 80%, var(--jewel-amber) 2px, transparent 2px),
+                radial-gradient(circle at 90% 60%, var(--jewel-amethyst) 3px, transparent 3px);
+            background-size: 400px 400px;
+            opacity: 0.12;
+            animation: beadFloat 60s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes beadFloat {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--jewel-ruby), var(--jewel-amethyst));
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px var(--shadow-soft);
+        }
+
+        header::before {
+            content: '◆ ○ ● ◇ ◆ ○ ● ◇ ◆ ○ ● ◇';
+            position: absolute;
+            top: 10px;
+            left: 0;
+            right: 0;
+            font-size: 14px;
+            color: var(--glass-shine);
+            letter-spacing: 20px;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 3.5em;
+            color: white;
+            text-shadow: 2px 4px 0 rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .tagline {
+            color: var(--silk-thread);
+            font-size: 1.2em;
+            font-weight: 300;
+            font-style: italic;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            background: white;
+            border: 2px solid var(--jewel-ruby);
+            padding: 12px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: var(--jewel-ruby);
+            box-shadow: 0 4px 10px var(--shadow-soft);
+        }
+
+        .nav-tab:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px var(--shadow-soft);
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, var(--jewel-ruby), var(--jewel-amethyst));
+            color: white;
+            border-color: var(--jewel-amethyst);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px var(--shadow-soft);
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--jewel-ruby);
+            font-size: 0.95em;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #E5E7EB;
+            border-radius: 10px;
+            font-family: 'Karla', sans-serif;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--jewel-ruby);
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+        }
+
+        .search-box input {
+            padding-left: 45px;
+        }
+
+        /* Pattern Grid */
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .pattern-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px var(--shadow-soft);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .pattern-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .pattern-image {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, var(--jewel-sapphire), var(--jewel-emerald));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pattern-image::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                var(--glass-shine) 10px,
+                var(--glass-shine) 20px
+            );
+            animation: beadPattern 20s linear infinite;
+        }
+
+        @keyframes beadPattern {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .pattern-body {
+            padding: 20px;
+        }
+
+        .pattern-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            color: var(--jewel-ruby);
+        }
+
+        .pattern-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .tag {
+            background: linear-gradient(135deg, var(--jewel-ruby), var(--jewel-amethyst));
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .difficulty {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .difficulty.beginner { background: #D1FAE5; color: var(--jewel-emerald); }
+        .difficulty.intermediate { background: #FEF3C7; color: var(--jewel-amber); }
+        .difficulty.advanced { background: #FCE7F3; color: var(--jewel-ruby); }
+
+        .pattern-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Karla', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--jewel-ruby), var(--jewel-amethyst));
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            border: 2px solid var(--jewel-ruby);
+            color: var(--jewel-ruby);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-favorite {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-favorite:hover {
+            transform: scale(1.2);
+        }
+
+        .btn-favorite.active {
+            animation: heartBeat 0.3s ease;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        /* Stitch Guide */
+        .stitch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .stitch-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 20px var(--shadow-soft);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .stitch-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .stitch-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6em;
+            color: var(--jewel-ruby);
+            margin-bottom: 15px;
+        }
+
+        .stitch-diagram {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #F3F4F6, #E5E7EB);
+            border-radius: 10px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stitch-description {
+            color: #4B5563;
+            line-height: 1.7;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 700px;
+            width: 100%;
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2em;
+            cursor: pointer;
+            color: var(--jewel-ruby);
+            line-height: 1;
+        }
+
+        .modal-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2.2em;
+            color: var(--jewel-ruby);
+            margin-bottom: 20px;
+        }
+
+        .modal-section {
+            margin-bottom: 25px;
+        }
+
+        .modal-section h3 {
+            font-family: 'DM Serif Display', serif;
+            color: var(--jewel-amethyst);
+            margin-bottom: 10px;
+        }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--jewel-ruby);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E5E7EB;
+            border-radius: 10px;
+            font-family: 'Karla', sans-serif;
+            font-size: 1em;
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--jewel-ruby);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #6B7280;
+        }
+
+        .empty-state-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: var(--jewel-ruby);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+
+            .pattern-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-row {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .nav-tab {
+                width: 100%;
+            }
+        }
+
+        /* Reading Guide Styles */
+        .guide-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 20px var(--shadow-soft);
+        }
+
+        .guide-section h2 {
+            font-family: 'DM Serif Display', serif;
+            color: var(--jewel-ruby);
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .guide-section h3 {
+            font-family: 'DM Serif Display', serif;
+            color: var(--jewel-amethyst);
+            font-size: 1.5em;
+            margin: 25px 0 15px;
+        }
+
+        .guide-section p {
+            color: #4B5563;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .guide-section ul {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        .guide-section li {
+            color: #4B5563;
+            line-height: 1.8;
+            margin-bottom: 8px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+            border-left: 4px solid var(--jewel-amber);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .highlight-box strong {
+            color: var(--jewel-amber);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>BeadVault</h1>
+        <p class="tagline">Your treasure trove of free beading patterns</p>
+    </header>
+
+    <div class="container">
+        <nav class="nav-tabs">
+            <div class="nav-tab active" onclick="switchTab('patterns')">Pattern Library</div>
+            <div class="nav-tab" onclick="switchTab('stitches')">Stitch Guides</div>
+            <div class="nav-tab" onclick="switchTab('reading')">How to Read Patterns</div>
+            <div class="nav-tab" onclick="switchTab('projects')">My Projects</div>
+            <div class="nav-tab" onclick="switchTab('submit')">Submit Pattern</div>
+        </nav>
+
+        <!-- PATTERN LIBRARY TAB -->
+        <div id="patterns" class="tab-content active">
+            <div class="filter-bar">
+                <div class="filter-row">
+                    <div class="filter-group search-box">
+                        <input type="text" id="searchInput" placeholder="Search patterns..." oninput="filterPatterns()">
+                    </div>
+                    <div class="filter-group">
+                        <label>Project Type</label>
+                        <select id="typeFilter" onchange="filterPatterns()">
+                            <option value="">All Types</option>
+                            <option value="jewelry">Jewelry</option>
+                            <option value="3d-animal">3D Animal</option>
+                            <option value="amigurumi">Beaded Amigurumi</option>
+                            <option value="ornament">Ornament</option>
+                            <option value="accessory">Accessory</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Stitch Type</label>
+                        <select id="stitchFilter" onchange="filterPatterns()">
+                            <option value="">All Stitches</option>
+                            <option value="peyote">Peyote (Even/Odd)</option>
+                            <option value="raw">Right Angle Weave (RAW)</option>
+                            <option value="brick">Brick Stitch</option>
+                            <option value="herringbone">Herringbone</option>
+                            <option value="netting">Netting</option>
+                            <option value="loomwork">Loomwork</option>
+                            <option value="wire">Wire Wrapping</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Difficulty</label>
+                        <select id="difficultyFilter" onchange="filterPatterns()">
+                            <option value="">All Levels</option>
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div id="patternGrid" class="pattern-grid"></div>
+        </div>
+
+        <!-- STITCH GUIDES TAB -->
+        <div id="stitches" class="tab-content">
+            <div class="stitch-grid" id="stitchGrid"></div>
+        </div>
+
+        <!-- READING GUIDE TAB -->
+        <div id="reading" class="tab-content">
+            <div class="guide-section">
+                <h2>📖 How to Read Beading Patterns</h2>
+                <p>Beading patterns can look intimidating at first, but once you understand the symbols and conventions, they become your roadmap to creating beautiful beadwork. This guide covers both wire and Fireline beading patterns.</p>
+
+                <h3>Understanding Pattern Diagrams</h3>
+                <p>Most beading patterns use visual diagrams where:</p>
+                <ul>
+                    <li><strong>Circles or ovals</strong> represent individual beads</li>
+                    <li><strong>Lines</strong> show the thread path through beads</li>
+                    <li><strong>Colors</strong> indicate different bead colors (check the color key!)</li>
+                    <li><strong>Numbers</strong> indicate the order to add beads or rows</li>
+                    <li><strong>Arrows</strong> show the direction of your needle/thread</li>
+                </ul>
+
+                <h3>Fireline & Thread Patterns</h3>
+                <p>Fireline (braided fishing line) is popular for bead weaving because it's strong and has minimal stretch.</p>
+                
+                <div class="highlight-box">
+                    <strong>Key Conventions:</strong>
+                    <ul>
+                        <li>Start beads are often shown in a different color or marked with ⭐</li>
+                        <li>Dotted lines show thread that passes through beads multiple times</li>
+                        <li>UP beads vs DOWN beads indicate which beads your needle exits</li>
+                    </ul>
+                </div>
+
+                <h3>Wire Beading Patterns</h3>
+                <p>Wire beading patterns focus on wire gauge, wrapping techniques, and structural support:</p>
+                <ul>
+                    <li><strong>Wire gauge numbers:</strong> Higher numbers = thinner wire (24g is thicker than 28g)</li>
+                    <li><strong>Wire types:</strong> Copper, sterling silver, gold-filled, or craft wire</li>
+                    <li><strong>Wrapping notation:</strong> Patterns may indicate number of wraps (3x, 5x)</li>
+                    <li><strong>Tool requirements:</strong> Round-nose pliers, flat-nose pliers, wire cutters</li>
+                </ul>
+
+                <h3>Common Abbreviations</h3>
+                <p>Patterns use shorthand to save space:</p>
+                <ul>
+                    <li><strong>DB</strong> - Delica bead (cylinder bead, size 11/0)</li>
+                    <li><strong>RB</strong> - Round bead</li>
+                    <li><strong>R#</strong> - Row number</li>
+                    <li><strong>St</strong> - Stitch</li>
+                    <li><strong>Rep</strong> - Repeat</li>
+                    <li><strong>PNT</strong> - Pass needle through</li>
+                    <li><strong>*...*</strong> - Section to repeat multiple times</li>
+                </ul>
+
+                <h3>Reading Stitch-Specific Patterns</h3>
+                
+                <h3>Peyote Stitch</h3>
+                <p>Peyote patterns show beads offset in a brick-like pattern. Odd-count peyote has a turn-around at row ends; even-count is simpler. Count beads in the first two rows to determine if it's even or odd.</p>
+
+                <h3>Right Angle Weave (RAW)</h3>
+                <p>RAW patterns show beads in square formations. Each "unit" has 4 beads (top, right, bottom, left). The needle typically exits from a different bead in each unit.</p>
+
+                <h3>Brick Stitch</h3>
+                <p>Brick stitch patterns look similar to peyote but the thread path is different. You stitch under the thread bridge between beads from the previous row.</p>
+
+                <div class="highlight-box">
+                    <strong>Pro Tip:</strong> Always read through the ENTIRE pattern before starting. Note the materials needed, the starting technique, and any special increases/decreases. Make a sample swatch first!
+                </div>
+
+                <h3>Material Lists</h3>
+                <p>Pattern material lists specify:</p>
+                <ul>
+                    <li><strong>Bead sizes:</strong> 11/0, 8/0, 6/0 (smaller number = larger bead)</li>
+                    <li><strong>Bead types:</strong> Seed beads, Delicas, crystals, pearls</li>
+                    <li><strong>Quantities:</strong> Usually in grams or number of beads</li>
+                    <li><strong>Thread:</strong> Type (Fireline, Nymo, etc.) and weight (6lb, 8lb)</li>
+                    <li><strong>Findings:</strong> Clasps, jump rings, ear wires</li>
+                </ul>
+
+                <h3>Troubleshooting Pattern Reading</h3>
+                <ul>
+                    <li><strong>Lost your place?</strong> Use a row counter or mark completed rows with a highlighter</li>
+                    <li><strong>Confused by the diagram?</strong> Check if there's a written instruction version</li>
+                    <li><strong>Colors unclear?</strong> Reference the bead color key, often at the top or bottom</li>
+                    <li><strong>Tension issues?</strong> Your beadwork should match the diagram's structure</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- MY PROJECTS TAB -->
+        <div id="projects" class="tab-content">
+            <div style="margin-bottom: 20px;">
+                <div class="nav-tabs" style="margin: 0;">
+                    <div class="nav-tab active" onclick="switchProjectTab('favorites')">❤️ Favorites</div>
+                    <div class="nav-tab" onclick="switchProjectTab('completed')">✅ Completed</div>
+                </div>
+            </div>
+
+            <div id="favoritesTab" class="project-tab active">
+                <div id="favoritesGrid" class="pattern-grid"></div>
+            </div>
+
+            <div id="completedTab" class="project-tab" style="display: none;">
+                <div id="completedGrid" class="pattern-grid"></div>
+            </div>
+        </div>
+
+        <!-- SUBMIT PATTERN TAB -->
+        <div id="submit" class="tab-content">
+            <div class="filter-bar">
+                <h2 style="font-family: 'DM Serif Display', serif; color: var(--jewel-ruby); margin-bottom: 20px;">Share Your Pattern</h2>
+                <p style="margin-bottom: 25px; color: #4B5563;">Help grow the BeadVault community by sharing your free patterns!</p>
+
+                <div class="form-group">
+                    <label>Pattern Name *</label>
+                    <input type="text" id="submitTitle" placeholder="e.g., Spiral Rope Bracelet">
+                </div>
+
+                <div class="form-group">
+                    <label>Description *</label>
+                    <textarea id="submitDescription" placeholder="Describe your pattern, what makes it special, any tips..."></textarea>
+                </div>
+
+                <div class="filter-row">
+                    <div class="form-group">
+                        <label>Project Type *</label>
+                        <select id="submitType">
+                            <option value="">Select type...</option>
+                            <option value="jewelry">Jewelry</option>
+                            <option value="3d-animal">3D Animal</option>
+                            <option value="amigurumi">Beaded Amigurumi</option>
+                            <option value="ornament">Ornament</option>
+                            <option value="accessory">Accessory</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Primary Stitch *</label>
+                        <select id="submitStitch">
+                            <option value="">Select stitch...</option>
+                            <option value="peyote">Peyote</option>
+                            <option value="raw">Right Angle Weave</option>
+                            <option value="brick">Brick Stitch</option>
+                            <option value="herringbone">Herringbone</option>
+                            <option value="netting">Netting</option>
+                            <option value="loomwork">Loomwork</option>
+                            <option value="wire">Wire Wrapping</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Difficulty *</label>
+                        <select id="submitDifficulty">
+                            <option value="">Select level...</option>
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Pattern Link (optional)</label>
+                    <input type="url" id="submitLink" placeholder="https://yourwebsite.com/pattern">
+                </div>
+
+                <div class="form-group">
+                    <label>Materials Needed</label>
+                    <textarea id="submitMaterials" placeholder="List all beads, thread, findings, tools needed..."></textarea>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; padding: 15px; font-size: 1.1em;" onclick="submitPattern()">
+                    ✨ Submit Pattern
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pattern Detail Modal -->
+    <div id="patternModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // Sample starter patterns
+        const starterPatterns = [
+            {
+                id: 1,
+                title: "Simple Peyote Bracelet",
+                type: "jewelry",
+                stitch: "peyote",
+                difficulty: "beginner",
+                description: "A classic even-count peyote stitch bracelet perfect for beginners. Uses size 11/0 seed beads in two colors.",
+                materials: "11/0 seed beads (2 colors), Fireline 6lb, beading needle, clasp",
+                icon: "💎",
+                author: "BeadVault",
+                link: null
+            },
+            {
+                id: 2,
+                title: "Beaded Octopus",
+                type: "3d-animal",
+                stitch: "raw",
+                difficulty: "intermediate",
+                description: "Adorable 3D octopus using RAW technique for the body and tentacles. Makes a great keychain!",
+                materials: "11/0 seed beads, 6/0 seed beads (eyes), Fireline 8lb, stuffing",
+                icon: "🐙",
+                author: "BeadVault",
+                link: null
+            },
+            {
+                id: 3,
+                title: "Wrapped Stone Pendant",
+                type: "jewelry",
+                stitch: "wire",
+                difficulty: "beginner",
+                description: "Wire-wrapped pendant technique for tumbled stones. Learn basic wire wrapping and loops.",
+                materials: "24g copper wire, tumbled stone, 20g wire (bail), chain",
+                icon: "✨",
+                author: "BeadVault",
+                link: null
+            },
+            {
+                id: 4,
+                title: "Brick Stitch Earrings",
+                type: "jewelry",
+                stitch: "brick",
+                difficulty: "beginner",
+                description: "Triangle-shaped earrings using brick stitch decrease technique. Fast and fun project!",
+                materials: "11/0 Delica beads (3 colors), Fireline 6lb, ear wires",
+                icon: "🔺",
+                author: "BeadVault",
+                link: null
+            },
+            {
+                id: 5,
+                title: "Netted Lace Bracelet",
+                type: "jewelry",
+                stitch: "netting",
+                difficulty: "intermediate",
+                description: "Delicate netted lace pattern creates an elegant, flexible bracelet. Beautiful texture!",
+                materials: "11/0 seed beads, 15/0 seed beads, Fireline 4lb, magnetic clasp",
+                icon: "🕸️",
+                author: "BeadVault",
+                link: null
+            },
+            {
+                id: 6,
+                title: "Beaded Bunny Amigurumi",
+                type: "amigurumi",
+                stitch: "peyote",
+                difficulty: "advanced",
+                description: "Fully beaded rabbit using tubular peyote. Requires tension control and shaping skills.",
+                materials: "11/0 seed beads (white, pink, black), Fireline 8lb, stuffing",
+                icon: "🐰",
+                author: "BeadVault",
+                link: null
+            },
+            {
+                id: 7,
+                title: "Herringbone Rope Necklace",
+                type: "jewelry",
+                stitch: "herringbone",
+                difficulty: "intermediate",
+                description: "Tubular herringbone creates a luxurious twisted rope. Add crystals for sparkle!",
+                materials: "11/0 cylinder beads, 4mm crystals, Fireline 6lb, clasp",
+                icon: "🌊",
+                author: "BeadVault",
+                link: null
+            },
+            {
+                id: 8,
+                title: "Snowflake Ornament",
+                type: "ornament",
+                stitch: "raw",
+                difficulty: "intermediate",
+                description: "Delicate beaded snowflake using RAW and netting. Perfect holiday decoration!",
+                materials: "11/0 seed beads (white/silver), 8/0 seed beads, Fireline 4lb, ribbon",
+                icon: "❄️",
+                author: "BeadVault",
+                link: null
+            },
+            {
+                id: 9,
+                title: "Beaded Butterfly",
+                type: "3d-animal",
+                stitch: "brick",
+                difficulty: "advanced",
+                description: "Realistic 3D butterfly with wire body and brick stitch wings. Stunning wall art!",
+                materials: "11/0 Delicas (rainbow colors), 24g wire, Fireline 6lb, pin back",
+                icon: "🦋",
+                author: "BeadVault",
+                link: null
+            },
+            {
+                id: 10,
+                title: "Loom Woven Cuff",
+                type: "jewelry",
+                stitch: "loomwork",
+                difficulty: "beginner",
+                description: "Geometric pattern bracelet on a bead loom. Great introduction to loomwork!",
+                materials: "11/0 Delicas (4 colors), Nymo thread, bead loom, clasp",
+                icon: "🎨",
+                author: "BeadVault",
+                link: null
+            }
+        ];
+
+        // Stitch guide data
+        const stitchGuides = [
+            {
+                name: "Peyote Stitch",
+                description: "One of the most versatile beading stitches. Creates a fabric-like structure with beads offset in rows. Can be worked flat or tubular, even-count or odd-count.",
+                techniques: ["Even-count peyote", "Odd-count peyote", "Tubular peyote", "Circular peyote"],
+                difficulty: "Beginner to Intermediate",
+                icon: "🧵"
+            },
+            {
+                name: "Right Angle Weave (RAW)",
+                description: "Creates a grid of beads where each unit forms a square. Extremely flexible and great for 3D structures. Each unit has 4 beads in a circular formation.",
+                techniques: ["Flat RAW", "Tubular RAW", "Cubic RAW (CRAW)", "Prismatic RAW"],
+                difficulty: "Intermediate",
+                icon: "⬜"
+            },
+            {
+                name: "Brick Stitch",
+                description: "Similar appearance to peyote but different thread path. You stitch under the thread bridge between beads. Excellent for shaped beadwork with increases/decreases.",
+                techniques: ["Basic brick stitch", "Increase/decrease", "Circular brick stitch"],
+                difficulty: "Beginner",
+                icon: "🧱"
+            },
+            {
+                name: "Herringbone",
+                description: "Creates a V-shaped pattern that stacks beautifully. Can be worked flat or tubular. Naturally forms a twisted rope when worked in the round.",
+                techniques: ["Flat herringbone", "Tubular herringbone", "Twisted herringbone", "Ndebele stitch"],
+                difficulty: "Intermediate",
+                icon: "〰️"
+            },
+            {
+                name: "Netting",
+                description: "Creates a lace-like, open structure with beautiful drape. Patterns vary from simple horizontal netting to complex vertical or diagonal designs.",
+                techniques: ["Horizontal netting", "Vertical netting", "Diagonal netting", "Circular netting"],
+                difficulty: "Beginner to Intermediate",
+                icon: "🕸️"
+            },
+            {
+                name: "Loomwork",
+                description: "Uses a bead loom to create flat, woven pieces. Perfect for geometric patterns and pixel-art designs. Warps are threaded on the loom before beading.",
+                techniques: ["Basic loom weaving", "Pattern reading", "Finishing techniques"],
+                difficulty: "Beginner",
+                icon: "🎨"
+            },
+            {
+                name: "Wire Wrapping",
+                description: "Uses jewelry wire to create frames, connections, and decorative elements. Beads are captured with wire loops and wraps. Requires wire-working tools.",
+                techniques: ["Basic loops", "Wrapped loops", "Wire weaving", "Stone wrapping"],
+                difficulty: "Beginner to Advanced",
+                icon: "💫"
+            }
+        ];
+
+        // LocalStorage keys
+        const STORAGE_KEYS = {
+            USER_PATTERNS: 'beadvault_user_patterns',
+            FAVORITES: 'beadvault_favorites',
+            COMPLETED: 'beadvault_completed'
+        };
+
+        // Initialize
+        let allPatterns = [...starterPatterns];
+        let favorites = JSON.parse(localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]');
+        let completed = JSON.parse(localStorage.getItem(STORAGE_KEYS.COMPLETED) || '[]');
+
+        // Load user-submitted patterns
+        const userPatterns = JSON.parse(localStorage.getItem(STORAGE_KEYS.USER_PATTERNS) || '[]');
+        allPatterns = [...starterPatterns, ...userPatterns];
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            // Render content based on tab
+            if (tabName === 'patterns') {
+                renderPatterns(allPatterns);
+            } else if (tabName === 'stitches') {
+                renderStitches();
+            } else if (tabName === 'projects') {
+                renderProjects();
+            }
+        }
+
+        function switchProjectTab(tabName) {
+            document.querySelectorAll('.project-tab').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            
+            if (tabName === 'favorites') {
+                document.getElementById('favoritesTab').style.display = 'block';
+            } else {
+                document.getElementById('completedTab').style.display = 'block';
+            }
+
+            event.target.classList.add('active');
+            event.target.parentElement.querySelectorAll('.nav-tab').forEach(tab => {
+                if (tab !== event.target) tab.classList.remove('active');
+            });
+
+            renderProjects();
+        }
+
+        function renderPatterns(patterns) {
+            const grid = document.getElementById('patternGrid');
+            
+            if (patterns.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔍</div>
+                        <h3>No patterns found</h3>
+                        <p>Try adjusting your filters or search terms</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = patterns.map(pattern => `
+                <div class="pattern-card" onclick="openPatternDetail(${pattern.id})">
+                    <div class="pattern-image" style="background: linear-gradient(135deg, ${getRandomGradient()})">
+                        <span style="position: relative; z-index: 1;">${pattern.icon}</span>
+                    </div>
+                    <div class="pattern-body">
+                        <h3 class="pattern-title">${pattern.title}</h3>
+                        <div class="pattern-meta">
+                            <span class="tag">${pattern.stitch.toUpperCase()}</span>
+                            <span class="difficulty ${pattern.difficulty}">${pattern.difficulty}</span>
+                        </div>
+                        <p style="color: #6B7280; margin-bottom: 10px;">${pattern.description.substring(0, 100)}...</p>
+                        <div class="pattern-actions">
+                            <button class="btn-favorite ${favorites.includes(pattern.id) ? 'active' : ''}" onclick="toggleFavorite(event, ${pattern.id})">
+                                ${favorites.includes(pattern.id) ? '❤️' : '🤍'}
+                            </button>
+                            <button class="btn btn-secondary" onclick="toggleCompleted(event, ${pattern.id})">
+                                ${completed.includes(pattern.id) ? '✅ Completed' : '⭕ Mark Complete'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderStitches() {
+            const grid = document.getElementById('stitchGrid');
+            grid.innerHTML = stitchGuides.map((stitch, index) => `
+                <div class="stitch-card">
+                    <h3 class="stitch-title">${stitch.name}</h3>
+                    <div class="stitch-diagram">
+                        <span style="font-size: 4em;">${stitch.icon}</span>
+                    </div>
+                    <p class="stitch-description">${stitch.description}</p>
+                    <div style="margin-top: 15px;">
+                        <strong style="color: var(--jewel-ruby);">Techniques:</strong>
+                        <ul style="margin-top: 8px; margin-left: 20px;">
+                            ${stitch.techniques.map(t => `<li>${t}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #F3F4F6;">
+                        <strong style="color: var(--jewel-amethyst);">Difficulty:</strong> ${stitch.difficulty}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderProjects() {
+            const favPatterns = allPatterns.filter(p => favorites.includes(p.id));
+            const compPatterns = allPatterns.filter(p => completed.includes(p.id));
+
+            const favGrid = document.getElementById('favoritesGrid');
+            const compGrid = document.getElementById('completedGrid');
+
+            if (favPatterns.length === 0) {
+                favGrid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">❤️</div>
+                        <h3>No favorites yet</h3>
+                        <p>Heart patterns you love to save them here!</p>
+                    </div>
+                `;
+            } else {
+                favGrid.innerHTML = favPatterns.map(pattern => createProjectCard(pattern)).join('');
+            }
+
+            if (compPatterns.length === 0) {
+                compGrid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">✅</div>
+                        <h3>No completed projects</h3>
+                        <p>Mark patterns as complete to track your progress!</p>
+                    </div>
+                `;
+            } else {
+                compGrid.innerHTML = compPatterns.map(pattern => createProjectCard(pattern)).join('');
+            }
+        }
+
+        function createProjectCard(pattern) {
+            return `
+                <div class="pattern-card" onclick="openPatternDetail(${pattern.id})">
+                    <div class="pattern-image" style="background: linear-gradient(135deg, ${getRandomGradient()})">
+                        <span style="position: relative; z-index: 1;">${pattern.icon}</span>
+                    </div>
+                    <div class="pattern-body">
+                        <h3 class="pattern-title">${pattern.title}</h3>
+                        <div class="pattern-meta">
+                            <span class="tag">${pattern.stitch.toUpperCase()}</span>
+                            <span class="difficulty ${pattern.difficulty}">${pattern.difficulty}</span>
+                        </div>
+                        <p style="color: #6B7280; margin-bottom: 10px;">${pattern.description.substring(0, 100)}...</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function filterPatterns() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const type = document.getElementById('typeFilter').value;
+            const stitch = document.getElementById('stitchFilter').value;
+            const difficulty = document.getElementById('difficultyFilter').value;
+
+            const filtered = allPatterns.filter(pattern => {
+                const matchSearch = pattern.title.toLowerCase().includes(search) || 
+                                   pattern.description.toLowerCase().includes(search);
+                const matchType = !type || pattern.type === type;
+                const matchStitch = !stitch || pattern.stitch === stitch;
+                const matchDifficulty = !difficulty || pattern.difficulty === difficulty;
+
+                return matchSearch && matchType && matchStitch && matchDifficulty;
+            });
+
+            renderPatterns(filtered);
+        }
+
+        function toggleFavorite(event, patternId) {
+            event.stopPropagation();
+            const index = favorites.indexOf(patternId);
+            
+            if (index > -1) {
+                favorites.splice(index, 1);
+            } else {
+                favorites.push(patternId);
+            }
+
+            localStorage.setItem(STORAGE_KEYS.FAVORITES, JSON.stringify(favorites));
+            renderPatterns(allPatterns);
+            
+            // Add animation
+            event.target.classList.add('active');
+        }
+
+        function toggleCompleted(event, patternId) {
+            event.stopPropagation();
+            const index = completed.indexOf(patternId);
+            
+            if (index > -1) {
+                completed.splice(index, 1);
+            } else {
+                completed.push(patternId);
+            }
+
+            localStorage.setItem(STORAGE_KEYS.COMPLETED, JSON.stringify(completed));
+            renderPatterns(allPatterns);
+        }
+
+        function openPatternDetail(patternId) {
+            const pattern = allPatterns.find(p => p.id === patternId);
+            if (!pattern) return;
+
+            const modal = document.getElementById('patternModal');
+            const modalBody = document.getElementById('modalBody');
+
+            modalBody.innerHTML = `
+                <h2 class="modal-title">${pattern.icon} ${pattern.title}</h2>
+                
+                <div class="modal-section">
+                    <div class="pattern-meta">
+                        <span class="tag">${pattern.stitch.toUpperCase()}</span>
+                        <span class="difficulty ${pattern.difficulty}">${pattern.difficulty}</span>
+                        <span class="tag">${pattern.type}</span>
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <h3>Description</h3>
+                    <p>${pattern.description}</p>
+                </div>
+
+                <div class="modal-section">
+                    <h3>Materials Needed</h3>
+                    <p>${pattern.materials}</p>
+                </div>
+
+                ${pattern.link ? `
+                    <div class="modal-section">
+                        <h3>Pattern Link</h3>
+                        <a href="${pattern.link}" target="_blank" style="color: var(--jewel-ruby); text-decoration: underline;">
+                            View Full Pattern →
+                        </a>
+                    </div>
+                ` : ''}
+
+                <div class="modal-section">
+                    <p style="color: #6B7280; font-style: italic;">
+                        Submitted by: ${pattern.author || 'BeadVault'}
+                    </p>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button class="btn btn-primary" style="flex: 1;" onclick="toggleFavorite(event, ${pattern.id}); closeModal();">
+                        ${favorites.includes(pattern.id) ? '❤️ Favorited' : '🤍 Add to Favorites'}
+                    </button>
+                    <button class="btn btn-secondary" style="flex: 1;" onclick="toggleCompleted(event, ${pattern.id}); closeModal();">
+                        ${completed.includes(pattern.id) ? '✅ Completed' : '⭕ Mark Complete'}
+                    </button>
+                </div>
+            `;
+
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('patternModal').classList.remove('active');
+        }
+
+        function submitPattern() {
+            const title = document.getElementById('submitTitle').value.trim();
+            const description = document.getElementById('submitDescription').value.trim();
+            const type = document.getElementById('submitType').value;
+            const stitch = document.getElementById('submitStitch').value;
+            const difficulty = document.getElementById('submitDifficulty').value;
+            const link = document.getElementById('submitLink').value.trim();
+            const materials = document.getElementById('submitMaterials').value.trim();
+
+            if (!title || !description || !type || !stitch || !difficulty) {
+                alert('Please fill in all required fields!');
+                return;
+            }
+
+            const icons = ['💎', '✨', '🌟', '🔮', '💫', '⭐', '🌸', '🦋', '🌺'];
+            const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+
+            const newPattern = {
+                id: Date.now(),
+                title,
+                type,
+                stitch,
+                difficulty,
+                description,
+                materials: materials || 'Materials list not provided',
+                icon: randomIcon,
+                author: 'Community Contributor',
+                link: link || null
+            };
+
+            // Save to localStorage
+            const userPatterns = JSON.parse(localStorage.getItem(STORAGE_KEYS.USER_PATTERNS) || '[]');
+            userPatterns.push(newPattern);
+            localStorage.setItem(STORAGE_KEYS.USER_PATTERNS, JSON.stringify(userPatterns));
+
+            // Add to allPatterns array
+            allPatterns.push(newPattern);
+
+            // Clear form
+            document.getElementById('submitTitle').value = '';
+            document.getElementById('submitDescription').value = '';
+            document.getElementById('submitType').value = '';
+            document.getElementById('submitStitch').value = '';
+            document.getElementById('submitDifficulty').value = '';
+            document.getElementById('submitLink').value = '';
+            document.getElementById('submitMaterials').value = '';
+
+            alert('✨ Pattern submitted successfully! Thank you for contributing to BeadVault!');
+            
+            // Switch to patterns tab
+            document.querySelector('.nav-tab').click();
+        }
+
+        function getRandomGradient() {
+            const gradients = [
+                'var(--jewel-ruby), var(--jewel-amethyst)',
+                'var(--jewel-sapphire), var(--jewel-emerald)',
+                'var(--jewel-amber), var(--jewel-ruby)',
+                'var(--jewel-amethyst), var(--jewel-sapphire)',
+                'var(--jewel-emerald), var(--jewel-amber)'
+            ];
+            return gradients[Math.floor(Math.random() * gradients.length)];
+        }
+
+        // Close modal on background click
+        document.getElementById('patternModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Initial render
+        renderPatterns(allPatterns);
+    </script>
+</body>
+</html>
