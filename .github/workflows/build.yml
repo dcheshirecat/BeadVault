@@ -201,6 +201,7 @@ jobs:
 
     - name: Generate App Icons with Python
       run: |
+        pip install Pillow
         python3 << 'PYTHON_SCRIPT'
         from PIL import Image, ImageDraw, ImageFont
         import os
